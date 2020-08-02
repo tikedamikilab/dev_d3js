@@ -37,6 +37,7 @@ function createsvg() {
         .attr("fill", "none")
         // strokeカラーを設定
         .attr("stroke", color)
+        .attr("stroke-width", 10)
         // d属性を設定
         .attr("d", line(dataset));
 
