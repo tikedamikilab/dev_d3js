@@ -23,6 +23,17 @@ function createBubble() {
         }
     ]
 
+    // data = d3.csvParse(await FileAttachment("flare.csv").text(), ({id, value}) => ({name: id.split(".").pop(), title: id.replace(/\./g, "/"), group: id.split(".")[1], value: +value}))
+
+    const width = 800
+    const height = width
+
+    pack = data => d3.pack()
+        .size([width - 2, height - 2])
+        .padding(3)
+        (d3.hierarchy({children: data})
+        .sum(d => d.value))
+
     const root = pack(data);
 
     const contents = d3.select('#bubble');
@@ -31,9 +42,6 @@ function createBubble() {
         .attr("font-size", 10)
         .attr("font-family", "sans-serif")
         .attr("text-anchor", "middle");
-
-    const width = 800
-    const height = width
 
     color = d3.scaleOrdinal(data.map(d => d.group), d3.schemeCategory10)
     
