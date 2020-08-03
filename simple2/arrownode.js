@@ -10,7 +10,7 @@ function createsvg() {
         [
             {
                 x : 100,
-                y : 70,
+                y : 80,
             },
             {
                 x : 300,
@@ -20,7 +20,7 @@ function createsvg() {
         [
             {
                 x : 100,
-                y : 70,
+                y : 60,
             },
             {
                 x : 400,
