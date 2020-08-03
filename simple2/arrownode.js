@@ -47,9 +47,17 @@ function createsvg() {
             .attr("stroke", color)
             // stroke幅
             .attr("stroke-width", 10)
+            // idを設定
+            .attr("id", "path"+i)
             // d属性を設定
             .attr("d", line(dataset[i]));
     }
     
+    lineText = svg.append("text")
+        .style("font-size", "20px")
+        .style("text-align","center")
+        .append("textPath")
+            .attr("xlink:href", "#path0")
+            .text("できた？")
 
 };
