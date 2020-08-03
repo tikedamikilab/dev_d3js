@@ -50,13 +50,11 @@ function createBubble() {
     
     // 3. svg要素の配置
     
-    
-
     const node = d3.select("svg").selectAll(".node")
-        .data(root2.descendants())
+        .data(root.descendants()) 
         .enter()
         .append("g")
-        .attr("transform", function(d) { return "translate(" + (500 + d.x) + "," + (d.y) + ")"; });
+        .attr("transform", function(d) { return "translate(" + (d.x) + "," + (d.y) + ")"; });
     
     const color = ["orange", "Khaki", "Ivory"];
     node.append("circle")
@@ -68,6 +66,26 @@ function createBubble() {
         .style("text-anchor", function(d) { return d.children ? "end" : "middle"; })
         .attr("font-size", "150%")
         .text(function(d) { return d.children ? "" : d.data.name; });
+
+    // *************************************
+
+    const node2 = d3.select("svg").selectAll(".node")
+        .data(root2.descendants()) 
+        .enter()
+        .append("g")
+        .attr("transform", function(d) { return "translate(" + (400 + d.x) + "," + (d.y) + ")"; });
+    
+    node2.append("circle")
+        .attr("r", function(d) { return d.r; })
+        .attr("stroke", "black")
+        .attr("fill", function(d) { return color[d.depth]; });
+    
+    node2.append("text")
+        .style("text-anchor", function(d) { return d.children ? "end" : "middle"; })
+        .attr("font-size", "150%")
+        .text(function(d) { return d.children ? "" : d.data.name; });
+
+    
 
 };
 
