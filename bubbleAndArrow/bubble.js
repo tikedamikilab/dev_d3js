@@ -38,18 +38,25 @@ function createBubble() {
     root = d3.hierarchy(data[0]);
     root.sum(function(d) { return d.value; });
     
+    root2 = d3.hierarchy(data[1]);
+    root2.sum(function(d) { return d.value; });
+
     const pack = d3.pack()
         .size([200, 200])
         .padding(0);
     
     pack(root);
+    pack(root2);
     
     // 3. svg要素の配置
+    
+    
+
     const node = d3.select("svg").selectAll(".node")
-        .data(root.descendants())
+        .data(root2.descendants())
         .enter()
         .append("g")
-        .attr("transform", function(d) { return "translate(" + d.x + "," + (d.y) + ")"; });
+        .attr("transform", function(d) { return "translate(" + (500 + d.x) + "," + (d.y) + ")"; });
     
     const color = ["orange", "Khaki", "Ivory"];
     node.append("circle")
