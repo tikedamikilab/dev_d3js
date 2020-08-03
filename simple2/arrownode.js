@@ -49,13 +49,14 @@ function createsvg() {
             .attr("stroke-width", 10)
             // idを設定
             .attr("id", "path"+i)
-            // d属性を設定
             .attr("d", line(dataset[i]));
     }
     
     lineText = svg.append("text")
+        .data(dataset[0])
         .style("font-size", "20px")
-        .style("text-align","center")
+        // 位置調整
+        .attr("transform", "translate(" + (dataset[0][1].x - dataset[0][0].x + 10)/2 + "," + (dataset[0][1].y- dataset[0][0].y)/2 + ")") 
         .append("textPath")
             .attr("xlink:href", "#path0")
             .text("できた？")
