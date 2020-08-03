@@ -6,7 +6,7 @@ createBubble();
 function createBubble() {
 
   // 1. 描画用のデータ準備
-    const width = 300;
+    const width = 1000;
     const height = width;
 
     const data = [
@@ -39,7 +39,7 @@ function createBubble() {
     root.sum(function(d) { return d.value; });
     
     const pack = d3.pack()
-        .size([width, height])
+        .size([200, 200])
         .padding(0);
     
     pack(root);
