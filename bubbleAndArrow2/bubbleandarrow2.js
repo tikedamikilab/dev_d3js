@@ -15,48 +15,48 @@ function createBubble() {
         .attr("height", height)
         .attr("transform", "translate(50,50)");
 
-    // // 線を引く
-    // const linedata = [
-    //     [
-    //         {
-    //             x : 100,
-    //             y : 100,
-    //         },
-    //         {
-    //             x : 500,
-    //             y : 300,
-    //         }
-    //     ],
-    // ]
+    // 線を引く
+    const linedata = [
+        [
+            {
+                x : 100,
+                y : 100,
+            },
+            {
+                x : 500,
+                y : 300,
+            }
+        ],
+    ]
 
-    // line = d3.line()
-    //     // lineのX軸をセット
-    //     .x(function(d) { return d.x; })
-    //     // lineのY軸をセット
-    //     .y(function(d) { return d.y; });
+    line = d3.line()
+        // lineのX軸をセット
+        .x(d => d.x)
+        // lineのY軸をセット
+        .y(d => d.y);
 
-    // for (let i = 0; i < linedata.length; i++){
-    //     // path全体の設定
-    //     path = svg.append("path")
-    //         // 塗りつぶしをなしに
-    //         .attr("fill", "none")
-    //         // strokeカラーを設定
-    //         .attr("stroke", "red")
-    //         // stroke幅
-    //         .attr("stroke-width", 10)
-    //         // idを設定
-    //         .attr("id", "path"+i)
-    //         .attr("d", line(linedata[i]));
-    // }
+    let path = []
+    for (let i = 0; i < linedata.length; i++){
+        // path全体の設定
+        path = svg.append("path")
+            // 塗りつぶしをなしに
+            .attr("fill", "none")
+            // strokeカラーを設定
+            .attr("stroke", "red")
+            // stroke幅
+            .attr("stroke-width", 10)
+            // idを設定
+            .attr("id", "path"+i)
+            .attr("d", line(linedata[i]));
+    }
     
-    // lineText = svg.append("text")
-    //     .data(linedata[0])
-    //     .style("font-size", "20px")
-    //     // 位置調整
-    //     .attr("transform", "translate(" + (linedata[0][1].x - linedata[0][0].x + 40)/2 + "," + (linedata[0][1].y- linedata[0][0].y)/2 + ")") 
-    //     .append("textPath")
-    //         .attr("xlink:href", "#path0")
-    //         .text("できた？")
+    lineText = svg.append("text")
+        .style("font-size", "20px")
+        // 位置調整
+        .attr("transform", "translate(" + (linedata[0][1].x - linedata[0][0].x - 60)/2 + "," + (linedata[0][1].y - linedata[0][0].y - 60)/2 + ")") 
+        .append("textPath")
+            .attr("xlink:href", "#path0")
+            .text("できた？")
 
     const wordCloudData = [
         {
@@ -83,14 +83,14 @@ function createBubble() {
         .size([200, 200])
         .padding(0);
 
-    root = []
+    const root = []
     for (let i = 0; i < wordCloudData.length; i++) {
         root[i] = d3.hierarchy(wordCloudData[i]);
         root[i].sum(function(d) { return d.value; });
         pack(root[i]);
     }
 
-    let node = [];
+    const node = [];
     // 3. svg要素の配置
     for (let i = 0; i < wordCloudData.length; i++) {
         node[i] = d3.select("svg").selectAll(".node")
@@ -98,8 +98,8 @@ function createBubble() {
         .enter()
         .append("g")
     }
-    node[0].attr("transform", function(d) { return "translate(" + (d.x) + "," + (d.y) + ")"; });
-    node[1].attr("transform", function(d) { return "translate(" + (400 + d.x) + "," + (200 + d.y) + ")"; });
+    node[0].attr("transform", d => "translate(" + (d.x) + "," + (d.y) + ")" );
+    node[1].attr("transform", d => "translate(" + (400 + d.x) + "," + (200 + d.y) + ")" );
 
     console.log(node)
 
@@ -117,32 +117,33 @@ function createBubble() {
             .text(function(d) { return d.children ? "" : d.data.name; });
     }
 
-    //link作成
-    const linkData = [
-        {source: "A", target: "E", value: 5},
-    ];
 
-    const links = linkData.map(d => Object.create(d));
-    const nodes = wordCloudData.map(d => Object.create(d));
+    // //link作成
+    // const linkData = [
+    //     {source: "A", target: "E", value: 5},
+    // ];
+
+    // const links = linkData.map(d => Object.create(d));
+    // const nodes = wordCloudData.map(d => Object.create(d));
     
-    const link = svg.append("g")
-        .attr("stroke", "#999")
-        .attr("stroke-opacity", 0.6)
-        .selectAll("line")
-        .data(links)
-        .join("line")
-        .attr("stroke-width", d => Math.sqrt(d.value));
+    // const link = svg.append("g")
+    //     .attr("stroke", "#999")
+    //     .attr("stroke-opacity", 0.6)
+    //     .selectAll("line")
+    //     .data(links)
+    //     .join("line")
+    //     .attr("stroke-width", d => Math.sqrt(d.value));
 
-    const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.name));
+    // const simulation = d3.forceSimulation(nodes)
+    //     .force("link", d3.forceLink(links).id(d => d.name));
 
-    simulation.on("tick", () => {
-        link
-            .attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x)
-            .attr("y2", d => d.target.y);
-    });
+    // simulation.on("tick", () => {
+    //     link
+    //         .attr("x1", d => d.source.x)
+    //         .attr("y1", d => d.source.y)
+    //         .attr("x2", d => d.target.x)
+    //         .attr("y2", d => d.target.y);
+    // });
 
 };
 
