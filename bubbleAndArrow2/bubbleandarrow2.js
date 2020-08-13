@@ -77,12 +77,8 @@ function createBubble() {
         },
     ]
 
-    const linkData = [
-        {source: "A", target: "D", value: 5},
-    ]
-
-
     // 2. 描画用のデータ変換
+    // node 配置
     const pack = d3.pack()
         .size([200, 200])
         .padding(0);
@@ -93,8 +89,7 @@ function createBubble() {
         root[i].sum(function(d) { return d.value; });
         pack(root[i]);
     }
-    
-    // node 配置
+
     let node = [];
     // 3. svg要素の配置
     for (let i = 0; i < wordCloudData.length; i++) {
@@ -121,6 +116,10 @@ function createBubble() {
     }
     // console.log(root[0])
 
+    //link作成
+    const linkData = [
+        {source: "A", target: "D", value: 5},
+    ]
 
 
 };
