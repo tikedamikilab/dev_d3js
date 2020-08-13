@@ -60,19 +60,19 @@ function createBubble() {
 
     const wordCloudData = [
         {
-            "name": "A",
-            "children": [
-                { "name": "B", "value": 25 },
-                { "name": "C", "value": 40 },
-                { "name": "D", "value": 10 }
+            name: "A",
+            children: [
+                { name: "B", value: 25 },
+                { name: "C", value: 40 },
+                { name: "D", value: 10 }
             ]
         },
         {
-            "name": "E",
-            "children": [
-                { "name": "F", "value": 25 },
-                { "name": "G", "value": 40 },
-                { "name": "H", "value": 60 }
+            name: "E",
+            children: [
+                { name: "F", value: 25 },
+                { name: "G", value: 40 },
+                { name: "H", value: 60 }
             ]
         },
     ]
@@ -101,6 +101,8 @@ function createBubble() {
     node[0].attr("transform", function(d) { return "translate(" + (d.x) + "," + (d.y) + ")"; });
     node[1].attr("transform", function(d) { return "translate(" + (400 + d.x) + "," + (200 + d.y) + ")"; });
 
+    console.log(node)
+
     const color = ["orange", "Khaki", "Ivory"];
 
     for (let i = 0; i < wordCloudData.length; i++) {
@@ -114,13 +116,33 @@ function createBubble() {
             .attr("font-size", "150%")
             .text(function(d) { return d.children ? "" : d.data.name; });
     }
-    // console.log(root[0])
 
     //link作成
     const linkData = [
-        {source: "A", target: "D", value: 5},
-    ]
+        {source: "A", target: "E", value: 5},
+    ];
 
+    const links = linkData.map(d => Object.create(d));
+    const nodes = wordCloudData.map(d => Object.create(d));
+    
+    const link = svg.append("g")
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.6)
+        .selectAll("line")
+        .data(links)
+        .join("line")
+        .attr("stroke-width", d => Math.sqrt(d.value));
+
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.name));
+
+    simulation.on("tick", () => {
+        link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+    });
 
 };
 
