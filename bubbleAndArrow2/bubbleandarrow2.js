@@ -17,16 +17,13 @@ function createBubble() {
 
     // 線を引く
     const linedata = [
-        [
-            {
-                x : 100,
-                y : 100,
-            },
-            {
-                x : 500,
-                y : 300,
-            }
-        ],
+        {
+            value:0.5,
+            linepath:[
+                { x : 100, y : 100 },
+                { x : 500, y : 300 }
+            ],
+        }
     ]
 
     line = d3.line()
@@ -47,13 +44,17 @@ function createBubble() {
             .attr("stroke-width", 10)
             // idを設定
             .attr("id", "path"+i)
-            .attr("d", line(linedata[i]));
+            .attr("d", line(linedata[i].linepath));
     }
     
     lineText = svg.append("text")
         .style("font-size", "20px")
         // 位置調整
-        .attr("transform", "translate(" + (linedata[0][1].x - linedata[0][0].x - 60)/2 + "," + (linedata[0][1].y - linedata[0][0].y - 60)/2 + ")") 
+        .attr("transform", "translate(" 
+            + (linedata[0].linepath[1].x - linedata[0].linepath[0].x - 60)/2
+            + ","
+            + (linedata[0].linepath[1].y - linedata[0].linepath[0].y - 60)/2
+            + ")") 
         .append("textPath")
             .attr("xlink:href", "#path0")
             .text("できた？")
@@ -107,14 +108,14 @@ function createBubble() {
 
     for (let i = 0; i < wordCloudData.length; i++) {
         node[i].append("circle")
-        .attr("r", function(d) { return d.r; })
-        .attr("stroke", "black")
-        .attr("fill", function(d) { return color[d.depth]; });
+        .attr("r", d => d.r)
+        .attr("stroke", "none")
+        .attr("fill", d => color[d.depth]);
     
         node[i].append("text")
-            .style("text-anchor", function(d) { return d.children ? "end" : "middle"; })
+            .style("text-anchor", d => d.children ? "end" : "middle")
             .attr("font-size", "150%")
-            .text(function(d) { return d.children ? "" : d.data.name; });
+            .text(d => d.children ? "" : d.data.name);
     }
 
 
