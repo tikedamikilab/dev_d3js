@@ -9,11 +9,24 @@ function createBubble() {
     const width = 300;
     const height = width;
     const data = {
-        "name": "A",
-        "children": [
-        { "name": "B", "value": 25 },
-        { "name": "C", "value": 40 },
-        { "name": "D", "value": 60 }
+        "name":top,
+        "children":[
+            {
+                "name": "A",
+                "children": [
+                { "name": "B", "value": 25 },
+                { "name": "C", "value": 40 },
+                { "name": "D", "value": 60 }
+                ]
+            },
+            {
+                "name": "A",
+                "children": [
+                { "name": "B", "value": 25 },
+                { "name": "C", "value": 40 },
+                { "name": "D", "value": 60 }
+                ]
+            }    
         ]
     };
 
@@ -28,7 +41,7 @@ function createBubble() {
     
     const pack = d3.pack()
         .size([width, height])
-        .padding(0);
+        .padding(10);
     
     pack(root);
     
@@ -42,8 +55,8 @@ function createBubble() {
     const color = ["orange", "Khaki", "Ivory"];
     node.append("circle")
         .attr("r", function(d) { return d.r; })
-        .attr("stroke", "black")
-        .attr("fill", function(d) { return color[d.depth]; });
+        .attr("stroke", "white")
+        .attr("fill", function(d) { return d.children ? "white" : color[d.depth]; });
     
     node.append("text")
         .style("text-anchor", function(d) { return d.children ? "end" : "middle"; })
