@@ -77,57 +77,50 @@ function createBubble() {
         },
     ]
 
+    const linkData = [
+        {source: "A", target: "D", value: 5},
+    ]
+
     // 2. 描画用のデータ変換
-    root = d3.hierarchy(wordCloudData[0]);
-    root.sum(function(d) { return d.value; });
-    
-    root2 = d3.hierarchy(wordCloudData[1]);
-    root2.sum(function(d) { return d.value; });
+    root = []
+    for (let i = 0; i < wordCloudData.length; i++) {
+        root[i] = d3.hierarchy(wordCloudData[i]);
+        root[i].sum(function(d) { return d.value; });
+    }
 
     const pack = d3.pack()
         .size([200, 200])
         .padding(0);
     
-    pack(root);
-    pack(root2);
-    
+    for (let i = 0; i < wordCloudData.length; i++) {
+        pack(root[i]);
+    }
+
+    // node 配置
+    let node = [];
     // 3. svg要素の配置
-    
-    const node = d3.select("svg").selectAll(".node")
-        .data(root.descendants()) 
+    for (let i = 0; i < wordCloudData.length; i++) {
+        node[i] = d3.select("svg").selectAll(".node")
+        .data(root[i].descendants()) 
         .enter()
         .append("g")
-        .attr("transform", function(d) { return "translate(" + (d.x) + "," + (d.y) + ")"; });
-    
+    }
+    node[0].attr("transform", function(d) { return "translate(" + (d.x) + "," + (d.y) + ")"; });
+    node[1].attr("transform", function(d) { return "translate(" + (400 + d.x) + "," + (200 + d.y) + ")"; });
+
     const color = ["orange", "Khaki", "Ivory"];
-    node.append("circle")
+
+    for (let i = 0; i < wordCloudData.length; i++) {
+        node[i].append("circle")
         .attr("r", function(d) { return d.r; })
         .attr("stroke", "black")
         .attr("fill", function(d) { return color[d.depth]; });
     
-    node.append("text")
-        .style("text-anchor", function(d) { return d.children ? "end" : "middle"; })
-        .attr("font-size", "150%")
-        .text(function(d) { return d.children ? "" : d.data.name; });
-
-    // *************************************
-
-    const node2 = d3.select("svg").selectAll(".node")
-        .data(root2.descendants()) 
-        .enter()
-        .append("g")
-        .attr("transform", function(d) { return "translate(" + (400 + d.x) + "," + (200 + d.y) + ")"; });
-    
-    node2.append("circle")
-        .attr("r", function(d) { return d.r; })
-        .attr("stroke", "black")
-        .attr("fill", function(d) { return color[d.depth]; });
-    
-    node2.append("text")
-        .style("text-anchor", function(d) { return d.children ? "end" : "middle"; })
-        .attr("font-size", "150%")
-        .text(function(d) { return d.children ? d.data.name : d.data.name; });
-
+        node[i].append("text")
+            .style("text-anchor", function(d) { return d.children ? "end" : "middle"; })
+            .attr("font-size", "150%")
+            .text(function(d) { return d.children ? "" : d.data.name; });
+    }
+    // console.log(root[0])
 };
-
 
