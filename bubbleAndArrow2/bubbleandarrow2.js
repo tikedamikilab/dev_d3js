@@ -15,48 +15,48 @@ function createBubble() {
         .attr("height", height)
         .attr("transform", "translate(50,50)");
 
-    // 線を引く
-    const linedata = [
-        [
-            {
-                x : 100,
-                y : 100,
-            },
-            {
-                x : 500,
-                y : 300,
-            }
-        ],
-    ]
+    // // 線を引く
+    // const linedata = [
+    //     [
+    //         {
+    //             x : 100,
+    //             y : 100,
+    //         },
+    //         {
+    //             x : 500,
+    //             y : 300,
+    //         }
+    //     ],
+    // ]
 
-    line = d3.line()
-        // lineのX軸をセット
-        .x(function(d) { return d.x; })
-        // lineのY軸をセット
-        .y(function(d) { return d.y; });
+    // line = d3.line()
+    //     // lineのX軸をセット
+    //     .x(function(d) { return d.x; })
+    //     // lineのY軸をセット
+    //     .y(function(d) { return d.y; });
 
-    for (let i = 0; i < linedata.length; i++){
-        // path全体の設定
-        path = svg.append("path")
-            // 塗りつぶしをなしに
-            .attr("fill", "none")
-            // strokeカラーを設定
-            .attr("stroke", "red")
-            // stroke幅
-            .attr("stroke-width", 10)
-            // idを設定
-            .attr("id", "path"+i)
-            .attr("d", line(linedata[i]));
-    }
+    // for (let i = 0; i < linedata.length; i++){
+    //     // path全体の設定
+    //     path = svg.append("path")
+    //         // 塗りつぶしをなしに
+    //         .attr("fill", "none")
+    //         // strokeカラーを設定
+    //         .attr("stroke", "red")
+    //         // stroke幅
+    //         .attr("stroke-width", 10)
+    //         // idを設定
+    //         .attr("id", "path"+i)
+    //         .attr("d", line(linedata[i]));
+    // }
     
-    lineText = svg.append("text")
-        .data(linedata[0])
-        .style("font-size", "20px")
-        // 位置調整
-        .attr("transform", "translate(" + (linedata[0][1].x - linedata[0][0].x + 40)/2 + "," + (linedata[0][1].y- linedata[0][0].y)/2 + ")") 
-        .append("textPath")
-            .attr("xlink:href", "#path0")
-            .text("できた？")
+    // lineText = svg.append("text")
+    //     .data(linedata[0])
+    //     .style("font-size", "20px")
+    //     // 位置調整
+    //     .attr("transform", "translate(" + (linedata[0][1].x - linedata[0][0].x + 40)/2 + "," + (linedata[0][1].y- linedata[0][0].y)/2 + ")") 
+    //     .append("textPath")
+    //         .attr("xlink:href", "#path0")
+    //         .text("できた？")
 
     const wordCloudData = [
         {
@@ -81,21 +81,19 @@ function createBubble() {
         {source: "A", target: "D", value: 5},
     ]
 
+
     // 2. 描画用のデータ変換
+    const pack = d3.pack()
+        .size([200, 200])
+        .padding(0);
+
     root = []
     for (let i = 0; i < wordCloudData.length; i++) {
         root[i] = d3.hierarchy(wordCloudData[i]);
         root[i].sum(function(d) { return d.value; });
-    }
-
-    const pack = d3.pack()
-        .size([200, 200])
-        .padding(0);
-    
-    for (let i = 0; i < wordCloudData.length; i++) {
         pack(root[i]);
     }
-
+    
     // node 配置
     let node = [];
     // 3. svg要素の配置
@@ -122,5 +120,8 @@ function createBubble() {
             .text(function(d) { return d.children ? "" : d.data.name; });
     }
     // console.log(root[0])
+
+
+
 };
 
