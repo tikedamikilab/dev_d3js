@@ -16,13 +16,13 @@ function createBubble() {
         .attr("transform", "translate(50,50)");
 
     // 線を引く
-    const linedata = [
+    const lineData = [
         {
-            value:0.5,
+            value:1,
             linepath:[
                 { x : 100, y : 100 },
                 { x : 500, y : 300 }
-            ],
+            ]
         }
     ]
 
@@ -33,34 +33,37 @@ function createBubble() {
         .y(d => d.y);
 
     let path = []
-    for (let i = 0; i < linedata.length; i++){
+    for (let i = 0; i < lineData.length; i++){
         // path全体の設定
         path = svg.append("path")
+            .attr("d", line(lineData[i].linepath))
             // 塗りつぶしをなしに
             .attr("fill", "none")
             // strokeカラーを設定
             .attr("stroke", "red")
-            // stroke幅
-            .attr("stroke-width", 10)
             // idを設定
             .attr("id", "path"+i)
-            .attr("d", line(linedata[i].linepath));
+            // stroke幅
+            .attr("stroke-width", d => lineData[0].value * 10);
     }
-    
+
+
+    // 文字
     lineText = svg.append("text")
         .style("font-size", "20px")
         // 位置調整
         .attr("transform", "translate(" 
-            + (linedata[0].linepath[1].x - linedata[0].linepath[0].x - 60)/2
+            + (lineData[0].linepath[1].x - lineData[0].linepath[0].x - 60)/2
             + ","
-            + (linedata[0].linepath[1].y - linedata[0].linepath[0].y - 60)/2
+            + (lineData[0].linepath[1].y - lineData[0].linepath[0].y - 60)/2
             + ")") 
         .append("textPath")
             .attr("xlink:href", "#path0")
-            .text("できた？")
+            .text(lineData[0].value)
 
     const wordCloudData = [
         {
+            id: 0,
             name: "A",
             children: [
                 { name: "B", value: 25 },
@@ -69,6 +72,7 @@ function createBubble() {
             ]
         },
         {
+            id: 1,
             name: "E",
             children: [
                 { name: "F", value: 25 },
@@ -87,7 +91,7 @@ function createBubble() {
     const root = []
     for (let i = 0; i < wordCloudData.length; i++) {
         root[i] = d3.hierarchy(wordCloudData[i]);
-        root[i].sum(function(d) { return d.value; });
+        root[i].sum(d => d.value);
         pack(root[i]);
     }
 
@@ -120,23 +124,25 @@ function createBubble() {
 
 
     // //link作成
-    // const linkData = [
-    //     {source: "A", target: "E", value: 5},
+    // const linksData = [
+    //     {source: 0, target: 1, value: 5},
     // ];
 
-    // const links = linkData.map(d => Object.create(d));
-    // const nodes = wordCloudData.map(d => Object.create(d));
+    // // const links = linksData.map(d => Object.create(d));
+    // // const nodes = wordCloudData.map(d => Object.create(d));
     
-    // const link = svg.append("g")
+    // const link = d3.select("svg")
+    //     .selectAll("line")
+    //     .data(linksData)
+    //     .enter()
+    //     // .join("line")
+    //     .append("line")
     //     .attr("stroke", "#999")
     //     .attr("stroke-opacity", 0.6)
-    //     .selectAll("line")
-    //     .data(links)
-    //     .join("line")
     //     .attr("stroke-width", d => Math.sqrt(d.value));
 
-    // const simulation = d3.forceSimulation(nodes)
-    //     .force("link", d3.forceLink(links).id(d => d.name));
+    // const simulation = d3.forceSimulation()
+    //     .force("link", d3.forceLink(linksData).id(d => d.id));
 
     // simulation.on("tick", () => {
     //     link
@@ -145,6 +151,5 @@ function createBubble() {
     //         .attr("x2", d => d.target.x)
     //         .attr("y2", d => d.target.y);
     // });
-
 };
 
