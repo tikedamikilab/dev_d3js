@@ -2,14 +2,15 @@
 // https://codepen.io/tiked/pen/dyMboLo?editors=0010
 // https://wizardace.com/d3-pack/
 createBubble();
+linkArc(d);
 
 function createBubble() {
 
   // 1. 描画用のデータ準備
-    const width = 1000;
+    const width = 800;
     const height = width;
 
-    const contents = d3.select('#bubble');
+    const contents = d3.select('#graph');
     const svg = contents.append("svg")
         .attr("width", width)
         .attr("height", height)
@@ -44,6 +45,7 @@ function createBubble() {
             // idを設定
             .attr("id", "path"+i)
             // stroke幅
+            // .attr("d", linkArc)
             .attr("stroke-width", d => lineData[0].value * 10);
     }
 
@@ -153,3 +155,10 @@ function createBubble() {
     // });
 };
 
+function linkArc(d) {
+    const r = Math.hypot(d.target.x - d.source.x, d.target.y - d.source.y);
+    return `
+        M${d.source.x},${d.source.y}
+        A${r},${r} 0 0,1 ${d.target.x},${d.target.y}
+    `;
+}

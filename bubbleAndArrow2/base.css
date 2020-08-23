@@ -1,0 +1,17 @@
+#container {
+    display: grid; /* グリッドレイアウト */
+    grid-template-rows: 100px 50px;
+    grid-template-columns: 150px 1fr;
+    grid-template-areas:
+        "areaA areaB"
+        "areaA areaB";
+}
+/* アイテム */
+#graph {
+    grid-area: areaA;
+    background: #f88;
+}
+#itemB {
+    grid-area: areaB;
+    background: #8f8;
+}
